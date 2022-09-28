@@ -28,5 +28,4 @@ const Wrap = styled.div`
 const SearchWrap = styled.main`
   width: 640px;
   height: 360px;
-  border: 2px solid red;
 `;

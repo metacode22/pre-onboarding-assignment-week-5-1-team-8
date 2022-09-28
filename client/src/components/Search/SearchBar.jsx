@@ -1,11 +1,43 @@
+import { useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import { FaSearch } from 'react-icons/fa';
+import palette from '../../styles/palette';
+import { getRecommends } from '../../lib';
+import { setRecommends } from '../../store/recommends';
+import { setEnteredText } from '../../store/enteredText';
+
+const DEBOUNCE_TIME = 250;
 
 function SearchBar() {
+  const inputRef = useRef();
+  const dispatch = useDispatch();
+
+  // todo: 이걸 어떻게 추상화하지...? custom hook?
+  let timer;
+  const handleSearch = async event => {
+    event.preventDefault();
+
+    if (timer) {
+      clearTimeout(timer);
+    }
+
+    timer = setTimeout(async () => {
+      const currentRecommends = await getRecommends(inputRef.current.value);
+      dispatch(setEnteredText(inputRef.current.value));
+      dispatch(setRecommends(currentRecommends));
+    }, DEBOUNCE_TIME);
+  };
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+
   return (
     <Wrap>
-      <Form>
-        {/* todo: input에 focus 필요 */}
-        <Input />
+      <Form onSubmit={event => handleSearch(event)}>
+        <Input ref={inputRef} placeholder="검색어를 입력해주세요." onChange={event => handleSearch(event)} />
+        <FaSearch />
       </Form>
     </Wrap>
   );
@@ -16,12 +48,18 @@ export default SearchBar;
 const Wrap = styled.div`
   width: 100%;
   height: 3em;
-  border: 4px solid blue;
 `;
 
 const Form = styled.form`
   width: 100%;
   height: 100%;
+  position: relative;
+
+  & > * {
+    color: ${palette.gray};
+    position: absolute;
+    right: 1em;
+  }
 
   display: flex;
   justify-content: center;
@@ -31,8 +69,8 @@ const Form = styled.form`
 const Input = styled.input`
   all: unset;
   width: 100%;
-  height: 100%;
-  border: 1px solid black;
+  height: 2em;
+  border: 2px solid ${palette.gray};
   border-radius: 16px;
   padding-left: 1em;
 `;
