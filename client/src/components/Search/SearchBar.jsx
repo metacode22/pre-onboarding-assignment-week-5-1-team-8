@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { FaSearch } from 'react-icons/fa';
 import palette from '../../styles/palette';
-import { getRecommends } from '../../lib';
+import { getCache, getRecommends, setCache } from '../../lib';
 import { setRecommends } from '../../store/recommends';
 import { setEnteredText } from '../../store/enteredText';
 
@@ -17,15 +17,23 @@ function SearchBar() {
   let timer;
   const handleSearch = async event => {
     event.preventDefault();
+    const enteredText = inputRef.current.value;
 
     if (timer) {
       clearTimeout(timer);
     }
 
     timer = setTimeout(async () => {
-      const currentRecommends = await getRecommends(inputRef.current.value);
-      dispatch(setEnteredText(inputRef.current.value));
+      let currentRecommends = getCache(enteredText);
+
+      if (!currentRecommends) {
+        currentRecommends = await getRecommends(enteredText);
+        dispatch(setRecommends(currentRecommends));
+        setCache(enteredText, currentRecommends);
+      }
+
       dispatch(setRecommends(currentRecommends));
+      dispatch(setEnteredText(enteredText));
     }, DEBOUNCE_TIME);
   };
 
