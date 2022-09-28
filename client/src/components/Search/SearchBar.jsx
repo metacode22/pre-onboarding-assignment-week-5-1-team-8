@@ -1,11 +1,13 @@
+import { useRef } from 'react';
 import styled from 'styled-components';
 
 function SearchBar() {
+  const inputRef = useRef();
+  
   return (
     <Wrap>
       <Form>
-        {/* todo: input에 focus 필요 */}
-        <Input />
+        <Input ref={inputRef}/>
       </Form>
     </Wrap>
   );
