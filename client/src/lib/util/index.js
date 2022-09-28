@@ -1,1 +1,1 @@
-export { default as textToBold } from './textToBold';
+export * from './cache';

@@ -6,7 +6,6 @@ import SearchRecommendItem from './SearchRecommendItem';
 
 function SearchRecommendList() {
   const recommends = useSelector(state => state.recommends);
-  console.info(recommends);
 
   return (
     <Wrap>
@@ -37,7 +36,7 @@ const Wrap = styled.div`
     color: ${palette.gray};
     margin-bottom: 1em;
   }
-  
+
   ul {
     color: ${palette.gray};
   }
