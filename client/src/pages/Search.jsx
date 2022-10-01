@@ -1,12 +1,11 @@
 import styled from 'styled-components';
-import { SearchBar } from '../components';
-import { SearchRecommend } from '../components';
+import { SearchBar, SearchRecommendList } from '../components';
 
 function Search() {
   return (
     <Wrap>
       <SearchBar />
-      <SearchRecommend />
+      <SearchRecommendList />
     </Wrap>
   );
 }
